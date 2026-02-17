@@ -1,0 +1,155 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "../generated/prisma"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+// ─── E-Commerce Models ─────────────────────────────────────────────
+
+model Category {
+    id          String    @id @default(cuid())
+    name        String
+    slug        String    @unique
+    description String?   @db.Text
+    image       String?
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    products    Product[]
+}
+
+model Product {
+    id          String      @id @default(cuid())
+    name        String
+    slug        String      @unique
+    description String      @db.Text
+    price       Float
+    compareAt   Float?
+    image       String
+    images      String      @db.Text // JSON array of image URLs
+    categoryId  String
+    category    Category    @relation(fields: [categoryId], references: [id])
+    stock       Int         @default(0)
+    featured    Boolean     @default(false)
+    rating      Float       @default(0)
+    reviewCount Int         @default(0)
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+    cartItems   CartItem[]
+    orderItems  OrderItem[]
+
+    @@index([categoryId])
+    @@index([slug])
+    @@index([featured])
+}
+
+model CartItem {
+    id        String   @id @default(cuid())
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    productId String
+    product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+    quantity  Int      @default(1)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([userId, productId])
+    @@index([userId])
+}
+
+model Order {
+    id              String      @id @default(cuid())
+    userId          String
+    user            User        @relation(fields: [userId], references: [id])
+    status          String      @default("pending") // pending, processing, shipped, delivered, cancelled
+    total           Float
+    subtotal        Float
+    tax             Float       @default(0)
+    shipping        Float       @default(0)
+    shippingName    String
+    shippingEmail   String
+    shippingAddress String      @db.Text
+    shippingCity    String
+    shippingState   String
+    shippingZip     String
+    shippingCountry String      @default("US")
+    paymentMethod   String      @default("card")
+    paymentStatus   String      @default("paid") // paid (placeholder always succeeds)
+    transactionId   String?
+    items           OrderItem[]
+    createdAt       DateTime    @default(now())
+    updatedAt       DateTime    @updatedAt
+
+    @@index([userId])
+    @@index([status])
+}
+
+model OrderItem {
+    id        String  @id @default(cuid())
+    orderId   String
+    order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+    productId String
+    product   Product @relation(fields: [productId], references: [id])
+    quantity  Int
+    price     Float
+    name      String
+    image     String
+
+    @@index([orderId])
+}
+
+// ─── Auth Models (NextAuth) ─────────────────────────────────────────
+
+model Account {
+    id                       String  @id @default(cuid())
+    userId                   String
+    type                     String
+    provider                 String
+    providerAccountId        String
+    refresh_token            String? @db.Text
+    access_token             String? @db.Text
+    expires_at               Int?
+    token_type               String?
+    scope                    String?
+    id_token                 String? @db.Text
+    session_state            String?
+    user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    refresh_token_expires_in Int?
+
+    @@unique([provider, providerAccountId])
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+    id            String     @id @default(cuid())
+    name          String?
+    email         String?    @unique
+    emailVerified DateTime?
+    image         String?
+    password      String?
+    accounts      Account[]
+    sessions      Session[]
+    cartItems     CartItem[]
+    orders        Order[]
+}
+
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+}

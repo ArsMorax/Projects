@@ -34,11 +34,6 @@ CREATE TABLE produk(
     Stok INT(11)
 );
 
--- =============================================
--- INSERT DATA
--- =============================================
-
--- Data Pelanggan
 INSERT INTO pelanggan (PelangganID, NamaPelanggan, Alamat, NomorTelepon) VALUES
 (1, 'Budi Santoso', 'Jl. Merdeka No. 123, Jakarta Pusat', '081234567890'),
 (2, 'Siti Rahayu', 'Jl. Sudirman No. 45, Bandung', '082345678901'),
@@ -51,7 +46,6 @@ INSERT INTO pelanggan (PelangganID, NamaPelanggan, Alamat, NomorTelepon) VALUES
 (9, 'Irfan Hakim', 'Jl. Kartini No. 90, Denpasar', '089012345678'),
 (10, 'Julia Putri', 'Jl. Veteran No. 21, Palembang', '081123456789');
 
--- Data Produk
 INSERT INTO produk (ProdukID, NamaProduk, Harga, Stok) VALUES
 (1, 'Laptop ASUS ROG', 15000000.00, 25),
 (2, 'Mouse Logitech G502', 850000.00, 100),
@@ -66,7 +60,6 @@ INSERT INTO produk (ProdukID, NamaProduk, Harga, Stok) VALUES
 (11, 'Mousepad Gaming XL', 250000.00, 150),
 (12, 'USB Hub 4 Port', 150000.00, 200);
 
--- Data Penjualan
 INSERT INTO penjualan (PenjualanID, TanggalPenjualan, PelangganID, TotalHarga) VALUES
 (1, '2026-01-02', 1, 16050000.00),
 (2, '2026-01-03', 2, 4750000.00),
@@ -81,7 +74,6 @@ INSERT INTO penjualan (PenjualanID, TanggalPenjualan, PelangganID, TotalHarga) V
 (11, '2026-01-14', 10, 15250000.00),
 (12, '2026-01-14', 2, 1000000.00);
 
--- Data Detail Penjualan
 INSERT INTO detailpenjualan (DetailID, PenjualanID, ProdukID, JumlahProduk, Subtotal) VALUES
 (1, 1, 1, 1, 15000000.00),
 (2, 1, 2, 1, 850000.00),
@@ -104,18 +96,13 @@ INSERT INTO detailpenjualan (DetailID, PenjualanID, ProdukID, JumlahProduk, Subt
 (19, 11, 11, 1, 250000.00),
 (20, 12, 11, 4, 1000000.00);
 
--- MENCATATKAN DATA TRANSAKSI PENJUALAN BARU
 INSERT INTO penjualan (PenjualanID, TanggalPenjualan, PelangganID, TotalHarga) VALUES
 (13, '2026-01-15', 3, 2050000.00);
 
--- MENCARI DATA PELANGGAN YANG MELAKUKAN TRANSAKSI PENJUALAN PADA TANGGAL TERTENTU
 SELECT p.PelangganID, p.NamaPelanggan, p.Alamat, p.NomorTelepon
 FROM pelanggan p
 JOIN penjualan s ON p.PelangganID = s.PelangganID
 WHERE s.TanggalPenjualan >= '2026-01-01';
 
--- CEK STOK PRODUK SETELAH PENJUALAN
 SELECT ProdukID, NamaProduk, Stok
 FROM produk;
-
--- 

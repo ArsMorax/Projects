@@ -1,0 +1,91 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+	--font-sans:
+		var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
+		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+	--color-brand-50: #f0f4ff;
+	--color-brand-100: #dbe4ff;
+	--color-brand-200: #bac8ff;
+	--color-brand-300: #91a7ff;
+	--color-brand-400: #748ffc;
+	--color-brand-500: #5c7cfa;
+	--color-brand-600: #4c6ef5;
+	--color-brand-700: #4263eb;
+	--color-brand-800: #3b5bdb;
+	--color-brand-900: #364fc7;
+
+	--animate-fade-in: fadeIn 0.5s ease-out;
+	--animate-slide-up: slideUp 0.5s ease-out;
+	--animate-slide-down: slideDown 0.3s ease-out;
+	--animate-scale-in: scaleIn 0.2s ease-out;
+}
+
+@keyframes animateIn {
+	from { opacity: 0; transform: scale(0.95); }
+	to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes animateOut {
+	from { opacity: 1; transform: scale(1); }
+	to { opacity: 0; transform: scale(0.95); }
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+@keyframes slideUp {
+	from { opacity: 0; transform: translateY(20px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+	from { opacity: 0; transform: translateY(-10px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+	from { opacity: 0; transform: scale(0.9); }
+	to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+	0% { background-position: -200% 0; }
+	100% { background-position: 200% 0; }
+}
+
+/* Base styles */
+@layer base {
+	body {
+		@apply bg-white text-neutral-900 antialiased;
+		font-feature-settings: "rlig" 1, "calt" 1;
+	}
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+	width: 6px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #d4d4d4;
+	border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #a3a3a3;
+}
+
+/* Selection */
+::selection {
+	background: var(--color-brand-200);
+	color: var(--color-brand-900);
+}
