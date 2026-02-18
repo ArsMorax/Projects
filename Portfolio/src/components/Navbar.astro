@@ -19,7 +19,6 @@ const navLinks = [
       &lt;AJI /&gt;
     </a>
 
-    <!-- Desktop nav -->
     <div class="hidden md:flex items-center gap-1">
       {navLinks.map((link) => (
         <a
@@ -31,7 +30,6 @@ const navLinks = [
       ))}
     </div>
 
-    <!-- Mobile menu button -->
     <button
       id="mobile-menu-btn"
       class="md:hidden p-2 rounded-lg text-text-muted hover:text-text hover:bg-white/5 transition-colors"
@@ -43,7 +41,6 @@ const navLinks = [
     </button>
   </div>
 
-  <!-- Mobile nav -->
   <div id="mobile-menu" class="hidden md:hidden border-t border-border/50 px-6 pb-4">
     {navLinks.map((link) => (
       <a
@@ -62,7 +59,6 @@ const navLinks = [
   btn?.addEventListener("click", () => {
     menu?.classList.toggle("hidden");
   });
-  // Close mobile menu on link click
   menu?.querySelectorAll("a").forEach((a) => {
     a.addEventListener("click", () => menu?.classList.add("hidden"));
   });
