@@ -1,0 +1,69 @@
+---
+interface Props {
+  activeSection?: string;
+}
+const { activeSection = "home" } = Astro.props;
+
+const navLinks = [
+  { href: "#home", label: "Home" },
+  { href: "#about", label: "About" },
+  { href: "#projects", label: "Projects" },
+  { href: "#skills", label: "Skills" },
+  { href: "#contact", label: "Contact" },
+];
+---
+
+<nav class="fixed top-0 inset-x-0 z-50 glass border-b border-border/50" id="navbar">
+  <div class="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
+    <a href="#home" class="text-xl font-bold text-gradient tracking-tight">
+      &lt;AJI /&gt;
+    </a>
+
+    <!-- Desktop nav -->
+    <div class="hidden md:flex items-center gap-1">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="px-4 py-2 text-sm font-medium text-text-muted rounded-lg transition-all duration-200 hover:text-text hover:bg-white/5"
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+
+    <!-- Mobile menu button -->
+    <button
+      id="mobile-menu-btn"
+      class="md:hidden p-2 rounded-lg text-text-muted hover:text-text hover:bg-white/5 transition-colors"
+      aria-label="Toggle menu"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile nav -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-border/50 px-6 pb-4">
+    {navLinks.map((link) => (
+      <a
+        href={link.href}
+        class="block py-3 text-sm font-medium text-text-muted hover:text-text transition-colors"
+      >
+        {link.label}
+      </a>
+    ))}
+  </div>
+</nav>
+
+<script>
+  const btn = document.getElementById("mobile-menu-btn");
+  const menu = document.getElementById("mobile-menu");
+  btn?.addEventListener("click", () => {
+    menu?.classList.toggle("hidden");
+  });
+  // Close mobile menu on link click
+  menu?.querySelectorAll("a").forEach((a) => {
+    a.addEventListener("click", () => menu?.classList.add("hidden"));
+  });
+</script>

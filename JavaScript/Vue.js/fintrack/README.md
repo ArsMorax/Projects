@@ -48,6 +48,8 @@
 
 ---
 
+(i used lokijs because i was lazy to install sdk's to use better-sqlite)
+
 ## 🚀 Getting Started
 
 ### Prerequisites

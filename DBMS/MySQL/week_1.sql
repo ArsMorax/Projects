@@ -106,3 +106,46 @@ WHERE s.TanggalPenjualan >= '2026-01-01';
 
 SELECT ProdukID, NamaProduk, Stok
 FROM produk;
+
+CREATE TRIGGER update_stok
+AFTER INSERT ON detailpenjualan
+FOR EACH ROW
+BEGIN
+    UPDATE produk
+    SET Stok = Stok - NEW.JumlahProduk
+    WHERE ProdukID = NEW.ProdukID;
+END;
+
+CREATE FUNCTION hitung_total_harga(penjualan_id INT)
+RETURNS DECIMAL(10, 2)
+DETERMINISTIC
+BEGIN
+    DECLARE total DECIMAL(10, 2);
+    SELECT SUM(Subtotal) INTO total
+    FROM detailpenjualan
+    WHERE PenjualanID = penjualan_id;
+    RETURN total;
+END;
+
+CREATE PROCEDURE tambah_penjualan(
+    IN p_PelangganID INT,
+    IN p_TanggalPenjualan DATE,
+    IN p_ProdukID INT,
+    IN p_JumlahProduk INT
+)
+BEGIN
+    DECLARE v_PenjualanID INT;
+    DECLARE v_Subtotal DECIMAL(10, 2);
+    
+    SELECT Harga * p_JumlahProduk INTO v_Subtotal
+    FROM produk
+    WHERE ProdukID = p_ProdukID;
+    
+    INSERT INTO penjualan (TanggalPenjualan, PelangganID, TotalHarga)
+    VALUES (p_TanggalPenjualan, p_PelangganID, v_Subtotal);
+    
+    SET v_PenjualanID = LAST_INSERT_ID();
+    
+    INSERT INTO detailpenjualan (PenjualanID, ProdukID, JumlahProduk, Subtotal)
+    VALUES (v_PenjualanID, p_ProdukID, p_JumlahProduk, v_Subtotal);
+END;

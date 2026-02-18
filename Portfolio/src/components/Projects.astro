@@ -1,0 +1,26 @@
+---
+import ProjectCard from "./ProjectCard.astro";
+import { projects } from "../data/projects";
+---
+
+<section id="projects" class="py-24 px-6">
+  <div class="max-w-6xl mx-auto">
+    <!-- Section header -->
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        Featured <span class="text-gradient">Projects</span>
+      </h2>
+      <p class="text-text-muted max-w-xl mx-auto">
+        Here's what I've been working on. These are the projects I'm actually proud of, each built with a different stack because I like trying new things.
+      </p>
+      <div class="w-20 h-1 bg-gradient-to-r from-primary to-accent rounded-full mx-auto mt-6"></div>
+    </div>
+
+    <!-- Projects grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {projects.map((project, index) => (
+        <ProjectCard project={project} index={index} />
+      ))}
+    </div>
+  </div>
+</section>
