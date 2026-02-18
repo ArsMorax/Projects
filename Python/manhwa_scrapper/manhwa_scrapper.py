@@ -133,27 +133,35 @@ def safe_goto(page, url, retries=3):
 
 
 def scroll_full_page(page, pause_ms=400):
-    """Scroll page in increments so lazy images trigger."""
-    page.evaluate("""
-        async (pauseMs) => {
-            await new Promise(resolve => {
-                let totalHeight = 0;
-                const distance = 600;
-                const timer = setInterval(() => {
-                    window.scrollBy(0, distance);
-                    totalHeight += distance;
-                    if (totalHeight >= document.body.scrollHeight) {
-                        clearInterval(timer);
-                        resolve();
-                    }
-                }, pauseMs);
-            });
-        }
-    """, pause_ms)
-    page.evaluate("window.scrollTo(0, 0)")
-    time.sleep(0.3)
-    page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-    time.sleep(1)
+    """Scroll page in increments so lazy images trigger.
+    Returns False if the execution context was destroyed (navigation/redirect)."""
+    try:
+        page.evaluate("""
+            async (pauseMs) => {
+                await new Promise(resolve => {
+                    let totalHeight = 0;
+                    const distance = 600;
+                    const timer = setInterval(() => {
+                        window.scrollBy(0, distance);
+                        totalHeight += distance;
+                        if (totalHeight >= document.body.scrollHeight) {
+                            clearInterval(timer);
+                            resolve();
+                        }
+                    }, pauseMs);
+                });
+            }
+        """, pause_ms)
+        page.evaluate("window.scrollTo(0, 0)")
+        time.sleep(0.3)
+        page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+        time.sleep(1)
+        return True
+    except Exception as e:
+        if "Execution context was destroyed" in str(e) or "navigation" in str(e).lower():
+            print("  [!] Page navigated away during scroll (ad/redirect detected).")
+            return False
+        raise
 
 
 # its scraping time baby
@@ -306,7 +314,7 @@ def get_chapter_list(page, series_url: str):
     return series_title, chapters
 
 
-def scrape_chapter_images(page, chapter_url: str):
+def scrape_chapter_images(page, chapter_url: str, _retries=2):
     """Scrape all panel images from a chapter page."""
     print(f"\n  [*] Loading chapter: {chapter_url}")
     if not safe_goto(page, chapter_url):
@@ -321,9 +329,21 @@ def scrape_chapter_images(page, chapter_url: str):
         print("  [!] Timeout waiting for images, continuing anyway...")
 
     print("  [*] Scrolling to load all panels...")
-    scroll_full_page(page, pause_ms=350)
+    if not scroll_full_page(page, pause_ms=350):
+        if _retries > 0:
+            print(f"  [*] Re-navigating to chapter... ({_retries} retries left)")
+            return scrape_chapter_images(page, chapter_url, _retries=_retries - 1)
+        else:
+            print("  [!] Page keeps redirecting, skipping chapter.")
+            return "Unknown", "0", []
     page.wait_for_timeout(2000)
-    scroll_full_page(page, pause_ms=200)
+    if not scroll_full_page(page, pause_ms=200):
+        if _retries > 0:
+            print(f"  [*] Re-navigating to chapter... ({_retries} retries left)")
+            return scrape_chapter_images(page, chapter_url, _retries=_retries - 1)
+        else:
+            print("  [!] Page keeps redirecting, skipping chapter.")
+            return "Unknown", "0", []
     page.wait_for_timeout(1000)
 
     url_match = re.search(r"/series/([^/]+?)(?:-[a-f0-9]{6,})?/chapter/(\d+)", chapter_url)
