@@ -11,7 +11,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-// ─── E-Commerce Models ─────────────────────────────────────────────
 
 model Category {
     id          String    @id @default(cuid())
@@ -103,8 +102,6 @@ model OrderItem {
 
     @@index([orderId])
 }
-
-// ─── Auth Models (NextAuth) ─────────────────────────────────────────
 
 model Account {
     id                       String  @id @default(cuid())
