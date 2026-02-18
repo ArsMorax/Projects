@@ -13,23 +13,27 @@ try:
 except ImportError:
     PIL_AVAILABLE = False
 
+# config (for now only asurascans im lazy to do other webs)
 BASE_URL = "https://asuracomic.net"
 RESULT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "result")
 NAV_TIMEOUT = 60_000
 LOAD_TIMEOUT = 15_000
 IMAGE_MIN_WIDTH = 800
 
-
 def make_full_url(href: str) -> str:
+    """Ensure href is a full absolute URL."""
     if not href:
         return ""
     if href.startswith("http"):
         return href
+    # Strip leading slashes for consistency
     path = href.lstrip("/")
+    # Playwright sometimes returns href without /series/ prefix
+    # e.g. "pick-me-up-infinite-gacha-8b65e2fc/chapter/1"
+    # Needs to become /series/pick-me-up-infinite-gacha-8b65e2fc/chapter/1
     if not path.startswith("series/"):
         path = "series/" + path
     return BASE_URL + "/" + path
-
 
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
@@ -51,6 +55,7 @@ def sanitize_filename(name: str) -> str:
 
 
 def download_image(url: str, save_path: str, session: requests.Session):
+    """Download image, optionally upscale, save as high-quality PNG."""
     headers = {
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -73,6 +78,7 @@ def download_image(url: str, save_path: str, session: requests.Session):
             new_size = (IMAGE_MIN_WIDTH, int(img.height * ratio))
             img = img.resize(new_size, Image.LANCZOS)
 
+        # Subtle sharpen for crispness
         img = img.filter(ImageFilter.SHARPEN)
 
         final_path = os.path.splitext(save_path)[0] + ".png"
@@ -89,8 +95,8 @@ def download_image(url: str, save_path: str, session: requests.Session):
 
     return final_path
 
-
 def new_page(browser):
+    """Create a new browser page with stealth-ish settings."""
     ctx = browser.new_context(
         user_agent=(
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -114,6 +120,7 @@ def new_page(browser):
 
 
 def safe_goto(page, url, retries=3):
+    """Navigate to url with retries on failure."""
     for attempt in range(1, retries + 1):
         try:
             page.goto(url, wait_until="domcontentloaded")
@@ -126,6 +133,7 @@ def safe_goto(page, url, retries=3):
 
 
 def scroll_full_page(page, pause_ms=400):
+    """Scroll page in increments so lazy images trigger."""
     page.evaluate("""
         async (pauseMs) => {
             await new Promise(resolve => {
@@ -148,7 +156,10 @@ def scroll_full_page(page, pause_ms=400):
     time.sleep(1)
 
 
+# its scraping time baby
+
 def get_popular_manhwa(page, tab="weekly"):
+    """Scrape popular manhwa sidebar from homepage."""
     print(f"\n  [*] Loading homepage...")
     if not safe_goto(page, BASE_URL):
         print("  [!] Could not load homepage.")
@@ -210,6 +221,7 @@ def get_popular_manhwa(page, tab="weekly"):
 
 
 def get_latest_updates(page):
+    """Scrape latest updated manhwa from homepage."""
     print("\n  [*] Loading homepage for latest updates...")
     if not safe_goto(page, BASE_URL):
         return []
@@ -246,6 +258,7 @@ def get_latest_updates(page):
 
 
 def get_chapter_list(page, series_url: str):
+    """Get chapters from a series page. Returns (title, [{chapter_num, title, url}])."""
     print(f"\n  [*] Loading series page...")
     if not safe_goto(page, series_url):
         return "", []
@@ -294,6 +307,7 @@ def get_chapter_list(page, series_url: str):
 
 
 def scrape_chapter_images(page, chapter_url: str):
+    """Scrape all panel images from a chapter page."""
     print(f"\n  [*] Loading chapter: {chapter_url}")
     if not safe_goto(page, chapter_url):
         return "Unknown", "0", []
@@ -356,6 +370,7 @@ def scrape_chapter_images(page, chapter_url: str):
 
 
 def download_chapter(manhwa_name: str, chapter_num: str, image_urls: list):
+    """Download all chapter images to result/<name>/chapter_<num>/."""
     if not image_urls:
         print("  [!] No images to download.")
         return
@@ -540,6 +555,8 @@ def menu_direct_url(page):
     name, ch_num, images = scrape_chapter_images(page, url)
     download_chapter(name, ch_num, images)
 
+
+# i hope it runs
 
 def main():
     clear_screen()
