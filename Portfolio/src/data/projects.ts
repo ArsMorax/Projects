@@ -18,17 +18,10 @@ export const projects: Project[] = [
     title: "Luxura",
     subtitle: "E-Commerce Platform",
     description:
-      "A full-blown e-commerce platform I built using Laravel and React through Inertia.js. It handles everything from user auth and product browsing to cart, checkout, wishlists, and even product reviews.",
-    longDescription: `Luxura is probably the most ambitious project I've worked on so far. I wanted to build a real, complete e-commerce platform, not just a tutorial-level CRUD app, but something that actually covers the full shopping experience from start to finish.
-
-The backend runs on Laravel 12 with 10 Eloquent models covering users, products, categories, carts, orders, reviews, and wishlists. I set up role-based access so regular users and admins have different permissions. Authentication is handled through Laravel Breeze and Sanctum, which made the auth flow pretty smooth to implement.
-
-For the frontend, I went with React 18 and TypeScript connected through Inertia.js. This gave me that single-page app feel without needing a separate API layer. The UI uses Radix UI components for accessibility and Framer Motion for some nice transitions. Everything is styled with Tailwind CSS.
-
-The database has 12 migrations covering everything from the basic user and product tables to more complex stuff like order items, product images, and review systems. I also wrote seeders so you can spin up the project with sample data right away.
-
-What I'm most proud of here is the scope. It's got product image galleries, a working wishlist system, a review system with ratings, a full cart-to-checkout-to-order pipeline, and user profile management. It taught me a lot about structuring a larger Laravel application and managing complex relationships between models.`,
-    image: "/images/luxura.svg",
+      "A comprehensive full-scale e-commerce platform built with Laravel and React via Inertia.js. Features 10 Eloquent models, role-based access control, product catalog with image galleries, shopping cart, checkout flow, order management, wishlists, product reviews, and user authentication with Laravel Breeze + Sanctum.",
+    longDescription:
+      "Luxura is the biggest project I've built so far. It's a full e-commerce platform where I connected Laravel on the backend with React on the frontend using Inertia.js, so everything feels like a single-page app but still has all the server-side power of Laravel behind it.\n\nI designed 10 Eloquent models, wrote 12 migrations, and set up proper relationships between users, products, categories, orders, wishlists, and reviews. The auth system uses Laravel Breeze with Sanctum, and I built role-based access so admins and regular users see different things.\n\nOn the frontend, I used Radix UI for accessible components and Framer Motion for animations. The product pages have image galleries, the cart updates in real time, and the checkout flow handles everything from address entry to order confirmation.",
+    image: "/images/luxura_img.jpeg",
     technologies: [
       "Laravel 12",
       "PHP 8.2",
@@ -58,19 +51,10 @@ What I'm most proud of here is the scope. It's got product image galleries, a wo
     title: "T3 E-Commerce",
     subtitle: "Type-Safe Online Store",
     description:
-      "An online store built with the T3 Stack where everything is type-safe from the database all the way to the frontend. Uses tRPC, Prisma, and NextAuth to keep things clean and reliable.",
-    longDescription: `This project was my deep dive into the T3 Stack, and honestly it changed how I think about building web apps. The whole idea behind this stack is that your types flow from the database schema through your API all the way to the React components, so if something breaks, TypeScript catches it before it ever hits production.
-
-I built it on Next.js 15 with React 19 and used tRPC for the API layer. Instead of writing REST endpoints and manually typing request/response objects, tRPC lets you define procedures on the server and call them directly from the client with full autocompletion and type checking. It sounds like magic until you try it and realize it just makes sense.
-
-The database layer uses Prisma with MySQL. The schema covers products (with images, ratings, stock, and a featured flag), categories, cart items, orders with line items, and users with auth sessions. I wrote a seed script that populates the database with realistic demo data so anyone cloning the repo can see it in action immediately.
-
-Authentication is handled by NextAuth with both credentials-based login (email + password with bcrypt hashing) and OAuth support. The UI is built with Radix UI primitives for things like dialogs, selects, toasts, and dropdown menus, plus Framer Motion for animations.
-
-The shopping flow works end to end: browse products, filter by category, view details, add to cart (there's a slide-out cart sheet), go through checkout, and then view your order history. I also added Zod validation on the tRPC procedures so the inputs are validated at runtime too.
-
-Building this really solidified my understanding of type-safe full-stack development, and it's now my go-to architecture when I want maximum developer experience.`,
-    image: "/images/t3-ecommerce.svg",
+      "A full-featured e-commerce web application built with the T3 Stack. End-to-end type safety with tRPC, Prisma ORM for database management, and NextAuth for authentication. Includes product browsing, cart management, checkout flow, order history, and a seed script to populate data.",
+    longDescription:
+      "This project was my deep dive into the T3 Stack. I wanted to experience what end-to-end type safety actually feels like, and building a full e-commerce app seemed like the best way to push it.\n\nThe backend uses tRPC, so every API call is fully typed from the server to the client with zero code generation. Prisma handles the database layer, and I set up NextAuth for authentication with both credential-based login and OAuth. The schema covers products, categories, carts, orders, and users.\n\nThe frontend is built with Next.js 15 and React 19. I added Radix UI for accessible dialogs and dropdowns, Framer Motion for page transitions, and Zod for runtime validation on forms. There's also a seed script that populates the database with demo products so you can see everything working right away.",
+    image: "/images/t3_img.jpeg",
     technologies: [
       "Next.js 15",
       "React 19",
@@ -101,19 +85,10 @@ Building this really solidified my understanding of type-safe full-stack develop
     title: "FinTrack",
     subtitle: "Personal Finance Dashboard",
     description:
-      "A finance tracking dashboard with a Vue.js frontend and Express.js backend. You can log transactions, view spending analytics through charts, and it auto-generates demo data for new accounts.",
-    longDescription: `FinTrack started because I wanted to build something practical that I could actually use, and tracking where my money goes felt like a solid idea. It's a full-stack app with a Vue.js 3 frontend and an Express.js backend, set up as a monorepo.
-
-The frontend is built with Vue 3 using the Composition API and TypeScript. State management uses Pinia, and the charts are powered by Chart.js through vue-chartjs. There's a main dashboard that shows your financial overview with stats cards and both bar and doughnut charts for spending breakdowns.
-
-The transactions page is where most of the action happens. You can create, edit, and delete transactions, search through them, filter by category or date range, and it's all paginated so it doesn't get slow with lots of data. The analytics page goes deeper with monthly trend analysis and category-by-category breakdowns.
-
-On the backend, Express handles the REST API with JWT authentication. I used LokiJS as the database, which is basically an in-memory document store that persists to disk. It's lightweight and perfect for a project like this where you don't need a full SQL setup. All request bodies are validated with Zod so bad data gets rejected early.
-
-One thing I'm happy with is the onboarding experience. When a new user registers, the backend automatically seeds their account with 60 realistic transactions across different categories so the dashboard and charts aren't empty on first login. It makes the app feel alive right away.
-
-The whole thing has a dark glassmorphism design with smooth transitions using FormKit's auto-animate. Both the client and server start together with concurrently, and the README documents every API endpoint.`,
-    image: "/images/fintrack.svg",
+      "A full-stack personal finance dashboard with Vue.js frontend and Express.js backend. Features JWT authentication, transaction CRUD with search/filter/pagination, interactive charts (bar & doughnut) for analytics, monthly trends, category breakdowns, and automatic demo data seeding for new users.",
+    longDescription:
+      "FinTrack is a personal finance dashboard I built as a monorepo with a Vue.js 3 frontend and an Express.js backend. I wanted to practice building a complete full-stack app with proper auth and data visualization.\n\nThe backend uses JWT for authentication and LokiJS as an in-memory database. I built a REST API with full CRUD for transactions, plus endpoints for analytics data. When a new user registers, the server automatically seeds 60 demo transactions so the dashboard isn't empty.\n\nThe frontend uses Pinia for state management, Chart.js for interactive bar and doughnut charts, and Tailwind CSS for a glassmorphism dark theme. You can search and filter transactions, view monthly spending trends, and see category breakdowns. I also added Zod for input validation on both ends.",
+    image: "/images/vue_img.jpeg",
     technologies: [
       "Vue.js 3",
       "TypeScript",
@@ -143,17 +118,10 @@ The whole thing has a dark glassmorphism design with smooth transitions using Fo
     title: "StoreHub",
     subtitle: "Product Inventory Manager",
     description:
-      "An inventory management app built with Go and MySQL. Has a clean dark UI with dashboard stats, product search, and CRUD operations. My first real project using Go for the backend.",
-    longDescription: `StoreHub was my way of learning Go for web development. I'd been writing Go scripts for concurrency experiments and kept hearing that Go is great for building web servers, so I decided to put that to the test by building something visual and functional.
-
-It's a product inventory management app. The Go backend serves an HTML page that's styled with Tailwind CSS (through CDN) and uses a dark glassmorphism design that I'm pretty happy with. The UI has a sidebar navigation, a dashboard with stats cards showing total products, total stock, and total inventory value, and a main product table with search filtering.
-
-The backend connects to a MySQL database and reads product data using Go's database/sql package with the go-sql-driver. On the frontend side, the CRUD operations (add, edit, delete) are handled through client-side JavaScript with confirmation modals and edit forms built right into the page.
-
-I also added some nice touches like Rupiah and USD currency formatting, a clean search bar that filters products in real time, and responsive design so it works on smaller screens.
-
-This project taught me a lot about Go's http package, template rendering, working with MySQL from Go, and how Go handles errors differently from languages I'm used to. It's simpler in scope than my other projects, but it's the one that pushed me outside my comfort zone the most.`,
-    image: "/images/storehub.svg",
+      "A product inventory management web application built with Go and MySQL. Features a polished dark glassmorphism UI with Tailwind CSS, dashboard stats cards (total products, stock, inventory value), product search filtering, CRUD operations with confirmation modals, and Rupiah/USD currency formatting.",
+    longDescription:
+      "StoreHub is a product inventory manager I built to learn Go for web development. The backend is a Go HTTP server connected to MySQL, and the frontend is server-rendered HTML with Tailwind CSS and vanilla JavaScript.\n\nThe dashboard shows stats cards for total products, total stock, and inventory value. There's a product list with search filtering and full CRUD operations. I added confirmation modals for delete actions and built a form system for creating and editing products.\n\nOne thing I liked building was the multi-currency formatting. It displays prices in both Rupiah and USD, which was a nice exercise in localization. The whole UI uses a dark glassmorphism theme that I styled from scratch with Tailwind.",
+    image: "/images/go_img.jpeg",
     technologies: [
       "Go",
       "MySQL",
@@ -178,19 +146,10 @@ This project taught me a lot about Go's http package, template rendering, workin
     title: "Manhwa Scraper",
     subtitle: "Web Scraping CLI Tool",
     description:
-      "A 600+ line Python CLI tool that downloads manhwa chapters using headless browser automation. Handles lazy-loaded images, does image upscaling, and has a neat interactive menu.",
-    longDescription: `This one's a bit different from my web projects. I read a lot of manhwa and wanted a way to download chapters for offline reading, so I built a CLI scraper for it. It turned into a pretty substantial Python project at over 600 lines.
-
-The scraper uses Playwright to control a headless Chromium browser. I went with full browser automation instead of just HTTP requests because the sites I'm scraping use JavaScript-heavy rendering and lazy-loaded images that only appear when you scroll down. So the scraper actually scrolls through each page to trigger all the image loads before downloading them.
-
-To avoid getting blocked, I implemented several stealth techniques: rotating user agents, blocking unnecessary resources like fonts and stylesheets to speed things up, and adding realistic delays between actions. There's also retry logic with exponential backoff for when requests fail.
-
-The image processing pipeline was a fun part to build. After downloading, each image goes through Pillow (Python's image library) where it gets upscaled if it's below 800 pixels wide and then sharpened. This makes the reading experience noticeably better, especially on larger screens.
-
-The CLI interface has an ASCII art banner because why not, and a menu system that lets you browse popular titles (by week, month, or all time), check latest updates, search for specific manhwa, and then select which chapters to download. The chapter selection is flexible too, so you can do ranges like "1-10", specific chapters like "5,10,15", or just "all".
-
-It's probably not the most portfolio-friendly project since it's a scraper, but I learned a ton about browser automation, image processing, and building interactive CLI tools with Python.`,
-    image: "/images/manhwa-scraper.svg",
+      "A 600+ line Python CLI tool for downloading manhwa chapters from the web. Uses Playwright for headless browser automation with stealth techniques, Pillow for image processing (upscaling & sharpening), supports browsing popular titles, batch chapter downloading with flexible range selection, and a polished interactive CLI menu with ASCII art.",
+    longDescription:
+      "This started as a personal tool because I read a lot of manhwa and wanted a better way to download chapters for offline reading. It ended up being over 600 lines of Python and taught me a ton about web scraping and browser automation.\n\nThe scraper uses Playwright to run a headless Chromium browser with stealth techniques like custom user agents and resource blocking to avoid detection. It can browse popular titles, let you pick a series, and then batch-download chapters with flexible range selection.\n\nAfter downloading, each image goes through a processing pipeline using Pillow. It upscales low-resolution panels and applies sharpening filters so the final result looks clean. The whole thing runs through an interactive CLI menu with ASCII art headers, progress bars, and retry logic for flaky connections.",
+    image: "/images/scrapper_img.jpeg",
     technologies: [
       "Python",
       "Playwright",
