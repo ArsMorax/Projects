@@ -23,7 +23,7 @@
 ### Backend (Express.js + TypeScript)
 - **RESTful API** — Clean, well-documented API endpoints
 - **JWT Authentication** — Secure token-based auth with bcrypt password hashing
-- **SQLite Database** — Zero-config database with better-sqlite3
+- **LokiJS Database** — Lightweight in-memory document DB with file persistence
 - **Zod Validation** — Runtime request validation with detailed error messages
 - **Pagination & Filtering** — Flexible query API with sort, search, date range filters
 - **Analytics Engine** — Dashboard stats, monthly trends, category breakdowns
@@ -41,7 +41,7 @@
 | State        | Pinia                                           |
 | Animation    | @formkit/auto-animate, CSS transitions          |
 | Backend      | Express.js, TypeScript, tsx                     |
-| Database     | SQLite3 (better-sqlite3)                        |
+| Database     | LokiJS (document DB with file persistence)       |
 | Auth         | JWT (jsonwebtoken), bcryptjs                    |
 | Validation   | Zod                                             |
 | HTTP Client  | Axios                                           |
@@ -157,7 +157,7 @@ fintrack/
 │       │   ├── categories.routes.ts
 │       │   └── analytics.routes.ts
 │       ├── middleware/         # Auth, validation, error handling
-│       ├── database.ts        # SQLite setup & seeding
+│       ├── database.ts        # LokiJS setup & seeding
 │       ├── types.ts           # Shared TypeScript types
 │       └── index.ts           # Server entry point
 │
